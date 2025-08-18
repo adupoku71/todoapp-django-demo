@@ -2,15 +2,20 @@
 
 <!-- main content of todo app  -->
 {% block content %}
+<!-- Add new task form -->
 
+<form action="{% url 'todo:add_task' %}" method="post">
+  {% csrf_token %} {{form.as_table}}
+  <button type="submit">Add Task</button>
+</form>
 <!-- list tasks -->
-<ul>
-  {% for task in tasks%}
-  <li>
-    <a href="{% url 'todo:detail' task.id %}"> {{task.title}} </a>
-  </li>
-  {% endfor %}
-</ul>
+{% for task in tasks%}
+<p>
+  <a href="{% url 'todo:detail' task.id %}"> {{task.title}} </a>
+  <!-- <form action="" method="post"></form> -->
+  <input type="checkbox" {% if task.completed %} checked {% endif %} />
+</p>
+{% endfor %}
 
 <!-- end of for loop -->
 {% endblock %}

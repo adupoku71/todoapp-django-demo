@@ -1,10 +1,12 @@
 from django.urls import path
+from django.views.generic.base import RedirectView
 from . import views
 
 
 app_name = "todo"
 urlpatterns = [
-    path('', views.all, name="all"),
+    path('', RedirectView.as_view(url="/tasks/", permanent=True)),
     path('tasks/', views.all, name="all"),
+    path('tasks/add/', views.add_task, name="add_task"),
     path('tasks/<int:id>/', views.detail, name="detail"),
 ]
