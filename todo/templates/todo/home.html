@@ -1,0 +1,16 @@
+{% extends "todo/base.html" %}
+
+<!-- main content of todo app  -->
+{% block content %}
+
+<!-- list tasks -->
+<ul>
+  {% for task in tasks%}
+  <li>
+    <a href="{% url 'todo:detail' task.id %}"> {{task.title}} </a>
+  </li>
+  {% endfor %}
+</ul>
+
+<!-- end of for loop -->
+{% endblock %}
