@@ -12,7 +12,7 @@
 {% for task in tasks %}
 <p>
 
-    <form method="post" id="task-form" action="{% url 'todo:update_task' task.id%}">
+    <form method="post" id="task-form" action="{% url 'todo:update_task' task.id %}">
       <a href="{% url 'todo:detail' task.id %}"> {{task.title}} </a>
       {% csrf_token %}
       <input
@@ -20,7 +20,7 @@
       name="completed"
       onchange="this.form.submit()"
       />
-      <a href="{% url 'todo:update_task' task.id%}">edit</a>
+      <a href="{% url 'todo:update_task' task.id %}">edit</a>
     </form>
 </p>
 {% endfor %}
