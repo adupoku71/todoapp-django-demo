@@ -1,29 +1,86 @@
 {% extends "todo/base.html" %}
+{% load widget_tweaks %} 
 
-<!-- main content of todo app  -->
 {% block content %}
 <!-- Add new task form -->
+<div class="mb-8">
+  <form action="{% url 'todo:add_task' %}" method="post" class="flex gap-2">
+    {% csrf_token %} 
+    <!-- {{ form.title }} -->
+     {% render_field form.title class="sm:flex-1 w-2/3 px-4 py-2 border border-gray-300 rounded-lg focus:none " placeholder="Enter new task..." %}
+    <button
+      type="submit"
+      class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200 whitespace-nowrap shrink-0 w-1/3 sm:w-auto"
+    >
+      Add Task
+    </button>
+  </form>
+</div>
 
-<form action="{% url 'todo:add_task' %}" method="post">
-  {% csrf_token %} {{form.title}}
-  <button type="submit">Add Task</button>
-</form>
-<!-- list tasks -->
-{% for task in tasks %}
-<p>
+<!-- Task list -->
+<div class="space-y-3">
+  {% for task in tasks %}
+  <div
+    class="flex items-center justify-between bg-white p-4 rounded-lg shadow border-l-4 {% if task.completed %}border-green-500 opacity-75{% else %}border-blue-500{% endif %}"
+  >
+    <!-- Task title and checkbox -->
+    <div class="flex items-center gap-4 flex-1">
+      <form
+        method="post"
+        action="{% url 'todo:update_task' task.id %}"
+        class="flex items-center gap-4"
+      >
+        {% csrf_token %}
+        <!-- Custom checkbox -->
+        <label class="flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            name="completed"
+            onchange="this.form.submit()"
+            {% if task.completed%} checked {% endif %} 
+            class="h-5 w-5 text-blue-500 rounded focus:ring-blue-400"
+          />
+        </label>
 
-    <form method="post" id="task-form" action="{% url 'todo:update_task' task.id %}">
-      <a href="{% url 'todo:detail' task.id %}"> {{task.title}} </a>
-      {% csrf_token %}
-      <input
-      {% if task.completed %} checked {% endif %} type="checkbox" 
-      name="completed"
-      onchange="this.form.submit()"
-      />
-      <a href="{% url 'todo:update_task' task.id %}">edit</a>
-    </form>
-</p>
-{% endfor %}
+        <!-- Task title link -->
+        <a
+          href="{% url 'todo:detail' task.id %}"
+          class="{% if task.completed %}line-through text-gray-500{% else %}text-gray-800 hover:text-blue-600{% endif %} transition duration-200 font-medium"
+        >
+          {{ task.title }}
+        </a>
+      </form>
+    </div>
 
-<!-- end of for loop -->
+    <!-- Edit button -->
+    <a
+      href="{% url 'todo:update_task' task.id %}"
+      class="text-gray-400 hover:text-blue-500 transition duration-200 ml-4"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+        />
+      </svg>
+    </a>
+    <!-- "{ url 'todo:delete_task' task.id }" -->
+    <a href="#" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-200 font-medium text-sm">
+  Delete
+    </a>
+  </div>
+  {% empty %}
+  <div class="text-center py-8 text-gray-500">
+    <p>No tasks yet. Add your first task above!</p>
+  </div>
+  {% endfor %}
+</div>
 {% endblock %}

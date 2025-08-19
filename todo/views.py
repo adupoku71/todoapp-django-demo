@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib import messages
 from .models import Task
-from .forms import TaskForm
+from .forms import TaskForm, AddTaskForm
 
 # Create your views here.
 
 def all(request):
     tasks = Task.objects.all()
-    form = TaskForm()
+    form = AddTaskForm()
     context = {"tasks": tasks, "form": form}
     return render(request, 'todo/home.html', context)
 
@@ -28,16 +29,11 @@ def update_task(request, id):
     if request.POST:
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
-            task = form.save(commit=False)
-            if "title" not in request.POST:
-                task.title = Task.objects.get(pk=id).title
-            if "description" not in request.POST:
-                task.description = Task.objects.get(pk=id).description
-            task.save()
-        return redirect('todo:all')
+            form.save()
+        return redirect(reverse('todo:detail', args=[id]))
     else:
         form = TaskForm(instance=task)
-    return render(request, "todo/update.html", {"form":form, "id": id})
+    return render(request, "todo/update.html", {"form":form, "id": id, "task":task})
 
 
 def detail(request, id):
