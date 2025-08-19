@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Task
-from .forms import AddTaskForm, TaskForm, UpdateTaskForm
+from .forms import TaskForm
 
 # Create your views here.
 
