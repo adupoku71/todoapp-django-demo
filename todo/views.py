@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from .models import Task
 from .forms import TaskForm, AddTaskForm
@@ -42,6 +42,13 @@ def update_task(request, id):
     else:
         form = TaskForm(instance=task)
     return render(request, "todo/update.html", {"form":form, "id": id, "task":task})
+
+
+@require_POST
+def delete_task(request, id):
+    task = Task.objects.get(pk=id)
+    task.delete()
+    return redirect('todo:all')
 
 
 def detail(request, id):
