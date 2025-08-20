@@ -27,10 +27,18 @@ def add_task(request):
 def update_task(request, id):
     task = Task.objects.get(pk=id)
     if request.POST:
-        form = TaskForm(request.POST, instance=task)
+        post_data = request.POST.copy()
+        
+        if not post_data.get("title"):
+            post_data["title"] = task.title
+        if not post_data.get("description"):
+            post_data["description"] = task.description
+
+        form = TaskForm(post_data, instance=task)
         if form.is_valid():
+            print(f'task is {task}')
             form.save()
-        return redirect(reverse('todo:detail', args=[id]))
+        return redirect('todo:all')
     else:
         form = TaskForm(instance=task)
     return render(request, "todo/update.html", {"form":form, "id": id, "task":task})
