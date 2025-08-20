@@ -7,14 +7,14 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="bg-gray-100 min-h-screen">
+  <body class="bg-gray-100 min-h-screen py-8 flex flex-col">
     <!-- Container -->
-    <div class="container mx-auto px-4 py-8 max-w-4xl">
+    <header class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">ToDo Application</h1>
+      <p class="text-gray-600">Stay organized and productive</p>
+    </header>
+    <div class="container mx-auto px-4 max-w-4xl flex-1">
       <!-- Header -->
-      <header class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">ToDo Application</h1>
-        <p class="text-gray-600">Stay organized and productive</p>
-      </header>
 
       <!-- Messages -->
       {% if messages %}
@@ -32,14 +32,16 @@
       {% endif %}
 
       <!-- Main Content -->
-      <main class="bg-white rounded-lg shadow-md p-6 mx-auto">
+      <main
+        class="bg-white rounded-lg shadow-md p-6 mx-auto text-sm sm:text-base"
+      >
         {% block content %} {% endblock %}
       </main>
 
       <!-- Footer -->
-      <footer class="text-center mt-8 text-gray-500 text-sm">
-        <p>© 2025 ADU-POKU. Built with Django & Tailwind CSS</p>
-      </footer>
     </div>
+    <footer class="text-center mt-8 text-gray-500 text-sm">
+      <p>© 2025 ADU-POKU. Built with Django & Tailwind CSS</p>
+    </footer>
   </body>
 </html>
